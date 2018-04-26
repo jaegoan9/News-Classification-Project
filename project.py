@@ -66,35 +66,38 @@ with open('stemmed_sentences.txt', 'r') as file1:
 
 # Set of all unique stemmed words
 vocab_set = list(set(all_words))
+print("length of all words (including repeats) is: " + str(len(all_words)))
 print("length of vocab list is " +str(len(vocab_set)))
 print("length of titles list is " + str(len(titles_doc_vector)))
 
-# # Feature vector of length number of titles
-# feature_vector = []
-# counter = 0
-# for freq_dict in titles_doc_vector:
-# 	counter += 1
-# 	temp_feat = []
-# 	for word in vocab_set:
-# 		if word in freq_dict:
-# 			temp_feat.append(freq_dict[word])
-# 		else:
-# 			temp_feat.append(0)
-# 	feature_vector.append(np.asarray(temp_feat))
-# 	# This part takes really damn long
-# 	print(counter)
+# Feature vector of length number of titles
+feature_vector = []
+counter = 0
+with open('feature_vector.txt', 'w') as file2:
+	for freq_dict in titles_doc_vector:
+		counter += 1
+		temp_feat = []
+		for word in vocab_set:
+			if word in freq_dict:
+				temp_feat.append(freq_dict[word])
+			else:
+				temp_feat.append(0)
+		feature_vector.append(np.asarray(temp_feat))
+	# This part takes really damn long
+		# if(counter == 10000):  # This is for testing purposes
+		# 	break
 
-# print("two")
-# # Decision Tree Classifier trial
-# train, test, train_labels, test_labels = train_test_split(feature_vector,
-#                                                       true_label,
-#                                                       test_size=0.33) #do a train_test split
-# model = DecisionTreeClassifier()
-# model.fit(train, train_labels)
-# preds = model.predict(test)
+print("two")
+# Decision Tree Classifier trial
+train, test, train_labels, test_labels = train_test_split(feature_vector,
+                                                      true_label,
+                                                      test_size=0.33) #do a train_test split
+model = DecisionTreeClassifier()
+model.fit(train, train_labels)
+preds = model.predict(test)
 
-# print ('%s %d %s %.3f %s %s %d %s %.3f %s' % ("### OVERALL CORRECT: ", 
-# accuracy_score(test_labels, preds) * len(test_labels), " = ",  
-# accuracy_score(test_labels, preds) * 100, "%   ", "INCORRECT: ", 
-# len(test_labels) - accuracy_score(test_labels, preds)*len(test_labels), " = ",  
-# 100 - accuracy_score(test_labels, preds) * 100, "%")) #print out results
+print ('%s %d %s %.3f %s %s %d %s %.3f %s' % ("### OVERALL CORRECT: ", 
+accuracy_score(test_labels, preds) * len(test_labels), " = ",  
+accuracy_score(test_labels, preds) * 100, "%   ", "INCORRECT: ", 
+len(test_labels) - accuracy_score(test_labels, preds)*len(test_labels), " = ",  
+100 - accuracy_score(test_labels, preds) * 100, "%")) #print out results
