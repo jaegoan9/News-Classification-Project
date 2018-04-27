@@ -86,6 +86,9 @@ with open('feature_vector.txt', 'w') as file2:
 	# This part takes really damn long
 		# if(counter == 10000):  # This is for testing purposes
 		# 	break
+		# Change "true_label" in train test split below to true_label[:10000]
+		# for segment testing
+		# Program WILL CRASH if run on full feature vector under current setting
 
 print("two")
 # Decision Tree Classifier trial
