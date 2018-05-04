@@ -30,7 +30,7 @@ import pre_processing
 parser = argparse.ArgumentParser(description='News Header Classification')
 # learning
 parser.add_argument('-lr', type=float, default=0.001, help='initial learning rate [default: 0.001]')
-parser.add_argument('-epochs', type=int, default=128, help='number of epochs for train [default: 256]')
+parser.add_argument('-epochs', type=int, default=64, help='number of epochs for train [default: 256]')
 parser.add_argument('-batch-size', type=int, default=1024, help='batch size for training [default: 64]')
 # data 
 parser.add_argument('-shuffle', action='store_true', default=False, help='shuffle the data every epoch')
@@ -87,5 +87,4 @@ model = model.Simple_Net()
 
 #Run Train
 #--------------------------------------#
-train.train(model, train_iter, args)
-train.eval(model, test_iter, args)
+train.train(model, train_iter, test_iter, args)
