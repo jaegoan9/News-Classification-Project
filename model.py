@@ -7,8 +7,8 @@ from torch.autograd import Variable
 class Simple_Net(nn.Module):
 	def __init__(self):
 		super(Simple_Net, self).__init__()
-		self.fc1 = nn.Linear(10530, 2000)
-		self.fc2 = nn.Linear(2000, 4)
+		self.fc1 = nn.Linear(10530, 5000)
+		self.fc2 = nn.Linear(5000, 4)
 
 	def forward(self, x):
 		x = self.fc1(x)

@@ -23,6 +23,7 @@ class Preprocessing():
 		self.true_label = [label for label in self.dataset['CATEGORY']]
 		self.unique_label = np.unique(self.true_label)
 		self.selected_labels = []
+		self.corpus_freq = defaultdict(int)
 
 	def clean_str(self, string):
 		string = re.sub(r"\\", "", string)    
@@ -66,13 +67,12 @@ class Preprocessing():
 		if process:
 			# List of all stemmed words (bag of words)
 			all_words = []
-			corpus_freq = defaultdict(int)
 			feature = OrderedDict()
 			with open('lemmatized.txt', 'r') as file:
 				for word in file:
 					word = word.strip('\n')
 					all_words.append(word)
-					corpus_freq[word] += 1.0
+					self.corpus_freq[word] += 1.0
 					feature[word] = 0
 
 			# Contains word freq dictionary for each title
@@ -92,7 +92,7 @@ class Preprocessing():
 			print("length of titles list is " + str(len(titles_doc_vector)))
 
 			freq_count = defaultdict(int)
-			for key, val in corpus_freq.items():
+			for key, val in self.corpus_freq.items():
 				freq_count[val] += 1
 			print("Number of words with freq = 1: " + str(freq_count[1]))
 			print("Number of words with freq = 2: " + str(freq_count[2]))
@@ -108,14 +108,14 @@ class Preprocessing():
 			freq_descending = sorted(freq_count, reverse=True)
 
 			#removing unnecessary
-			for key, val in corpus_freq.items():
+			for key, val in self.corpus_freq.items():
 				if (val >= 0 and val <= 20) or val in freq_descending[0:200]:
-					del corpus_freq[key]
+					del self.corpus_freq[key]
 					del feature[key]
 			print('\n')
 			print('finished processing')
 			print("length of features is " +str(len(feature)))
-			print("length of features is " +str(len(corpus_freq)))
+			print("length of features is " +str(len(self.corpus_freq)))
 			print("length of examples is " + str(len(titles_doc_vector)))
 
 			jobs = []
@@ -132,8 +132,8 @@ class Preprocessing():
 			counter += 1
 			instance = feature.copy()
 			for word, freq in freq_dict.items():
-				if word in corpus_freq and corpus_freq[word] != 0:
-					instance[word] = freq / corpus_freq[word]
+				if word in self.corpus_freq and self.corpus_freq[word] != 0:
+					instance[word] = freq / self.corpus_freq[word]
 			feature_vector[counter] = instance.values()
 			if counter == 1000:
 				start += 1
